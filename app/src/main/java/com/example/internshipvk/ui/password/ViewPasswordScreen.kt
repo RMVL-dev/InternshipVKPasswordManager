@@ -16,7 +16,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import com.example.internshipvk.data.DomainData
 import com.example.internshipvk.ui.passwords.PasswordsViewModel
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -24,7 +23,7 @@ import com.example.internshipvk.ui.passwords.PasswordsViewModel
 fun ViewPassword(
     modifier: Modifier = Modifier,
     viewModel: PasswordsViewModel,
-    navigateToEdit: (data:DomainData?) -> Unit
+    navigateToEdit: () -> Unit
 ){
     val activity = LocalContext.current as Activity
     viewModel.getToDisplayPasswordCredential(activity = activity)
@@ -55,7 +54,9 @@ fun ViewPassword(
 
         Button(
             modifier = modifier.fillMaxWidth(),
-            onClick = {  }
+            onClick = {
+                navigateToEdit()
+            }
         ) {
             Text(
                 modifier = modifier.fillMaxWidth(),

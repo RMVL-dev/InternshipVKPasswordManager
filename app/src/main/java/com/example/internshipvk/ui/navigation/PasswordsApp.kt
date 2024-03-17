@@ -16,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.internshipvk.provider.InternshipViewModelProvider
-import com.example.internshipvk.ui.addpassword.AddDomainScreen
+import com.example.internshipvk.ui.addpassword.AddOrEditDomainScreen
 import com.example.internshipvk.ui.password.ViewPassword
 import com.example.internshipvk.ui.passwords.PasswordsViewModel
 import com.example.internshipvk.ui.passwords.SiteListScreen
@@ -33,7 +33,7 @@ fun PasswordsApp(
 ){
     passwordsViewModel.context = LocalContext.current
     passwordsViewModel.initDomainList()
-    passwordsViewModel.getRequest("https://vk.com/")
+    //passwordsViewModel.getRequest("https://vk.com/")
 
     Scaffold(
         topBar = {
@@ -49,33 +49,33 @@ fun PasswordsApp(
 
         NavHost(
             navController = navController,
-            startDestination = if (passwordsViewModel.domainList.isEmpty()) NavigationGraph.AddPassword.name else NavigationGraph.SiteList.name,
+            startDestination = if (passwordsViewModel.domainList.isEmpty()) NavigationGraph.AddEditPassword.name else NavigationGraph.SiteList.name,
             modifier = modifier.padding(paddingValues = paddingValues)
         ){
             composable(route = NavigationGraph.SiteList.name){
                 SiteListScreen(
                     passwordsViewModel = passwordsViewModel,
                     navigateToAddDomain = {
-                        navController.navigate(NavigationGraph.AddPassword.name)
+                        navController.navigate(NavigationGraph.AddEditPassword.name)
                     },
                     navigateToViewPassword = {
                         navController.navigate(NavigationGraph.ViewPassword.name)
                     }
                 )
             }
-            composable(route = NavigationGraph.AddPassword.name){
-                AddDomainScreen(
+            composable(route = NavigationGraph.AddEditPassword.name){
+                AddOrEditDomainScreen(
                     viewModelPass = passwordsViewModel,
                     navigateToDomainList = {
                         navController.navigate(NavigationGraph.SiteList.name)
-                    },
-                    domainData = null
+                    }
                 )
             }
 
             composable(route = NavigationGraph.ViewPassword.name){
                 ViewPassword(viewModel = passwordsViewModel,
                     navigateToEdit = {
+                        navController.navigate(NavigationGraph.AddEditPassword.name)
                     }
                 )
             }

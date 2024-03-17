@@ -29,30 +29,20 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.internshipvk.R
-import com.example.internshipvk.data.DomainData
 import com.example.internshipvk.ui.passwords.PasswordsViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
-fun AddDomainScreen(
+fun AddOrEditDomainScreen(
     modifier: Modifier = Modifier,
     viewModelPass: PasswordsViewModel,
     navigateToDomainList: () -> Unit,
-    domainData:DomainData? = null
 ){
 
-    var domain by if(domainData?.domain == null) {
-        remember { mutableStateOf("") }
-    }else{
-        remember { mutableStateOf(domainData.domain) }
-    }
+    var domain by remember { mutableStateOf(viewModelPass.currentDomain?.domain ?: "") }
+    var login by remember { mutableStateOf(viewModelPass.currentDomain?.login ?: "") }
 
-    var login by if(domainData?.login == null) {
-        remember { mutableStateOf("") }
-    }else{
-        remember { mutableStateOf(domainData.login) }
-    }
     var password by remember { mutableStateOf("") }
     val activity = LocalContext.current as Activity
 
@@ -107,7 +97,12 @@ fun AddDomainScreen(
             Box(
                 modifier = modifier
             ){
-                Text(text = stringResource(id = R.string.add_account).toUpperCase(Locale.current))
+                Text(
+                    text = if (login.isEmpty() && domain.isEmpty())
+                        stringResource(id = R.string.add_account).toUpperCase(Locale.current)
+                    else
+                        stringResource(id = R.string.edit_account).toUpperCase(Locale.current)
+                )
             }
         }
     }

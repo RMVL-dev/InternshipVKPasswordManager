@@ -69,7 +69,7 @@ class PasswordsViewModel(
             val previousData =
                 Json.decodeFromString<List<DomainData>>(sharedPreferencesManager.siteList)
                     .toMutableList()
-            val newData: MutableList<DomainData> = previousData
+            val newData: MutableSet<DomainData> = previousData.toMutableSet()
             newData.add(DomainData(domain, login))
             sharedPreferencesManager.siteList = Json.encodeToString(newData)
             domainList = Json.decodeFromString<List<DomainData>>(sharedPreferencesManager.siteList)
