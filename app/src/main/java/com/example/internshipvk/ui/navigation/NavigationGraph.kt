@@ -1,8 +1,9 @@
 package com.example.internshipvk.ui.navigation
 
-enum class NavigationGraph(title:String) {
+enum class NavigationGraph() {
 
-    SiteList(title = "siteList"),
-    AddPassword(title = "addPassword")
+    SiteList,
+    AddPassword,
+    ViewPassword
 
 }

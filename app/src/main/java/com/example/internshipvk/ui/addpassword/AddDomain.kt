@@ -1,4 +1,4 @@
-package com.example.internshipvk.ui.passwords
+package com.example.internshipvk.ui.addpassword
 
 import android.app.Activity
 import android.os.Build
@@ -29,6 +29,8 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.internshipvk.R
+import com.example.internshipvk.data.DomainData
+import com.example.internshipvk.ui.passwords.PasswordsViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -36,11 +38,21 @@ import com.example.internshipvk.R
 fun AddDomainScreen(
     modifier: Modifier = Modifier,
     viewModelPass: PasswordsViewModel,
-    navigateToDomainList: () -> Unit
+    navigateToDomainList: () -> Unit,
+    domainData:DomainData? = null
 ){
 
-    var domain by remember { mutableStateOf("") }
-    var login by remember { mutableStateOf("") }
+    var domain by if(domainData?.domain == null) {
+        remember { mutableStateOf("") }
+    }else{
+        remember { mutableStateOf(domainData.domain) }
+    }
+
+    var login by if(domainData?.login == null) {
+        remember { mutableStateOf("") }
+    }else{
+        remember { mutableStateOf(domainData.login) }
+    }
     var password by remember { mutableStateOf("") }
     val activity = LocalContext.current as Activity
 

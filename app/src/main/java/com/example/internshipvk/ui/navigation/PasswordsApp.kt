@@ -1,7 +1,5 @@
 package com.example.internshipvk.ui.navigation
 
-import android.hardware.biometrics.BiometricManager
-import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -10,20 +8,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.internshipvk.provider.InternshipViewModelProvider
-import com.example.internshipvk.ui.passwords.AddDomainScreen
+import com.example.internshipvk.ui.addpassword.AddDomainScreen
+import com.example.internshipvk.ui.password.ViewPassword
 import com.example.internshipvk.ui.passwords.PasswordsViewModel
 import com.example.internshipvk.ui.passwords.SiteListScreen
-import java.util.concurrent.Executor
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,13 +33,14 @@ fun PasswordsApp(
 ){
     passwordsViewModel.context = LocalContext.current
     passwordsViewModel.initDomainList()
+    passwordsViewModel.getRequest("https://vk.com/")
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = navController.currentDestination?.displayName ?: "Passwords Application"
+                        text = navController.currentDestination?.navigatorName ?: "Password manager"
                     )
                 }
             )
@@ -57,17 +54,31 @@ fun PasswordsApp(
         ){
             composable(route = NavigationGraph.SiteList.name){
                 SiteListScreen(
-                    passwordsViewModel = passwordsViewModel
-                ){
-                    navController.navigate(NavigationGraph.AddPassword.name)
-                }
+                    passwordsViewModel = passwordsViewModel,
+                    navigateToAddDomain = {
+                        navController.navigate(NavigationGraph.AddPassword.name)
+                    },
+                    navigateToViewPassword = {
+                        navController.navigate(NavigationGraph.ViewPassword.name)
+                    }
+                )
             }
             composable(route = NavigationGraph.AddPassword.name){
-                AddDomainScreen(viewModelPass = passwordsViewModel){
-                    navController.navigate(NavigationGraph.SiteList.name)
-                }
+                AddDomainScreen(
+                    viewModelPass = passwordsViewModel,
+                    navigateToDomainList = {
+                        navController.navigate(NavigationGraph.SiteList.name)
+                    },
+                    domainData = null
+                )
             }
 
+            composable(route = NavigationGraph.ViewPassword.name){
+                ViewPassword(viewModel = passwordsViewModel,
+                    navigateToEdit = {
+                    }
+                )
+            }
         }
 
     }

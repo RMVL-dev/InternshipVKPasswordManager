@@ -1,6 +1,7 @@
 package com.example.internshipvk.ui.passwords
 
-import android.hardware.biometrics.BiometricManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,26 +11,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.internshipvk.R
-import com.example.internshipvk.data.SiteData
+import com.example.internshipvk.data.DomainData
 
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun SiteListScreen(
     modifier: Modifier = Modifier,
     passwordsViewModel: PasswordsViewModel,
-    navigateToAddDomain: () -> Unit
+    navigateToAddDomain: () -> Unit,
+    navigateToViewPassword: () -> Unit
 ){
 
     ConstraintLayout(
@@ -46,7 +47,13 @@ fun SiteListScreen(
                 }
         ){
             items(passwordsViewModel.domainList){domain ->
-                DomainCard(domainItem = domain)
+                DomainCard(
+                    domainItem = domain,
+                    onClick = {
+                        passwordsViewModel.currentDomain = it
+                        navigateToViewPassword()
+                    }
+                )
             }
         }
         OutlinedButton(
@@ -65,16 +72,21 @@ fun SiteListScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DomainCard(
     modifier: Modifier = Modifier,
-    domainItem: SiteData
+    domainItem: DomainData,
+    onClick:(DomainData) -> Unit
 ){
 
     Card(modifier = modifier
         .fillMaxWidth()
-        .padding(top = 8.dp, bottom = 8.dp)
-        ){
+        .padding(top = 8.dp, bottom = 8.dp),
+        onClick = {
+            onClick(domainItem)
+        }
+    ){
         Row {
             Image(painter = painterResource(
                 id = R.drawable.ic_launcher_foreground),
@@ -87,10 +99,4 @@ fun DomainCard(
         }
     }
 
-}
-
-@Preview
-@Composable
-fun PreviewCard(){
-    DomainCard(domainItem = SiteData("Google.com", "MyMail@gmail.com"))
 }

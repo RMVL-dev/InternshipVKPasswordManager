@@ -12,7 +12,6 @@ class InternshipViewModelProvider {
     val factory = viewModelFactory {
         initializer {
             PasswordsViewModel(
-                application = internshipApplication(),
                 repository = internshipApplication().internshipContainer.repository
             )
         }

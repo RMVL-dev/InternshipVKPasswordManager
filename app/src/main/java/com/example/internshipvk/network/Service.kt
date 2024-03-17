@@ -5,5 +5,5 @@ import retrofit2.http.Url
 
 interface Service {
     @GET
-    suspend fun getFavIcon(@Url url:String)
+    suspend fun getFavIcon(@Url url:String):String
 }
