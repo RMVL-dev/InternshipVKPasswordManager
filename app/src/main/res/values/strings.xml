@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">InternshipVK</string>
+
+    //add account screen
+    <string name="domain">Domain</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="add_account">Add account</string>
+</resources>
